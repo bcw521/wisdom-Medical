@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wisdommedical.mapper.DoctorMapper">
+    <insert id="inrrecord">
+        insert into record(name, career, sex, address, age, doctor_name, create_d_time, disease) value
+            (#{name},#{career},#{sex},#{address},#{age},#{doctor_name},#{create_d_time},#{disease})
+    </insert>
+    <update id="doctorupinfo">
+#         set后面的条件要用逗号不能用and，set后面的多个条件之间没有关联也不可以有关联，所以就不能用and了；where 条件后面 可以为and。
+        update doctor set account=#{account},phone=#{phone} where id=#{id}
+    </update>
+    <update id="doctoruppwd">
+        update doctor set password=#{password} where id=#{id}
+    </update>
+    <update id="updaterecord">
+        update record set name=#{name},career=#{career},sex=#{sex}, address=#{address},
+                          age=#{age},create_d_time=#{create_d_time}, disease=#{disease} where doctor_name=#{doctor_name} and name=#{name}
+    </update>
+    <select id="login" resultType="com.example.wisdommedical.entity.Doctor">
+        select * from doctor where account=#{account} and password=#{password}
+    </select>
+    <select id="getdoctorname" resultType="string">
+        SELECT
+            `name`
+        FROM
+            dictor
+        WHERE
+                dictor_id =(
+                SELECT
+                    id
+                FROM
+                    doctor
+                WHERE
+                    account = #{account})
+    </select>
+    <select id="doctorInfo" resultType="string">
+        SELECT office_name FROM office WHERE id=(
+            SELECT id FROM dictor WHERE `name`=#{name})
+    </select>
+    <select id="getdoctorphone" resultType="java.lang.String">
+        select phone from dictor where name=#{name}
+    </select>
+    <select id="getid" resultType="com.example.wisdommedical.entity.Expert">
+        SELECT dictor_id FROM dictor WHERE `name`=#{name}
+    </select>
+    <select id="getrecord" resultType="com.example.wisdommedical.entity.Record">
+        select * from record where doctor_name=#{name}
+    </select>
+</mapper>

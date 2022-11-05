@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wisdommedical.mapper.AdminMapper">
+    <insert id="insert">
+        insert into doctorinfo(name, sex, phone, dep, number, last_number, is_work, work_time) VALUES
+    (#{name},#{sex},#{phone},#{dep},#{number},#{last_number},#{is_work},#{work_time})
+    </insert>
+    <update id="adminuppwd">
+        update admin set password=#{password} where id=#{id}
+    </update>
+    <update id="updaterecord">
+        update record set name=#{name},career=#{career},sex=#{sex}, address=#{address},
+                          age=#{age},create_d_time=#{create_d_time}, disease=#{disease} where doctor_name=#{doctor_name} and name=#{name}
+    </update>
+    <select id="login" resultType="com.example.wisdommedical.entity.Admin">
+        select * from admin where account=#{account} and password=#{password}
+    </select>
+    <select id="getrecord" resultType="com.example.wisdommedical.entity.Record">
+        select * from record where doctor_name=#{name}
+    </select>
+    <select id="showdoctor" resultType="com.example.wisdommedical.entity.DoctorInfo">
+        select * from doctorinfo;
+    </select>
+    <delete id="delete">
+        delete from doctorinfo where name=#{name}
+    </delete>
+</mapper>

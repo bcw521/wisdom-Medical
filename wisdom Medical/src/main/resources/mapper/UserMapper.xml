@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.wisdommedical.mapper.UserMapper">
+
+    <insert id="insert">
+        insert into register_info(card, sex, phone, address, disease, password,name)
+            value(#{card},#{sex},#{phone},#{address},#{disease},#{password},#{name})
+    </insert>
+    <insert id="indertInfo">
+        insert into appointment(name, sex, dictor_name, dictor_sex, book_time,last_number) value (#{name},#{sex},#{dictor_name},#{dictor_sex},#{book_time},#{last_number})
+    </insert>
+    <delete id="delappointment">
+        delete from appointment where id=#{id};
+    </delete>
+    <select id="selectById" resultType="com.example.wisdommedical.entity.Expert">
+       select name, dictor_time, number, last_number,dictor.dictor_id,dictor.sex from dictor inner join workspace on dictor.dictor_id = workspace.id where dictor.id=#{id}
+    </select>
+    <select id="login" resultType="com.example.wisdommedical.entity.Register_user">
+        select name from register_info where name=#{name}
+    </select>
+    <select id="login_confirm" resultType="com.example.wisdommedical.entity.Register_user">
+        select * from register_info where name=#{name} and password=#{password}
+    </select>
+    <select id="query" resultType="com.example.wisdommedical.entity.Appointment">
+        select * from appointment;
+    </select>
+    <select id="user_cx" resultType="com.example.wisdommedical.entity.Register_user">
+        select * from register_info where name=#{name} and password=#{password} and card=#{card}
+    </select>
+    <select id="searchBycard" resultType="com.example.wisdommedical.entity.Appointment">
+        SELECT * FROM appointment WHERE `name`=(SELECT `name` FROM register_info WHERE card=#{card})
+    </select>
+    <select id="page" resultType="com.example.wisdommedical.entity.Appointment">
+        select * from appointment limit #{pageNum},#{pageSize}
+    </select>
+    <select id="querd" resultType="com.example.wisdommedical.entity.Appointment">
+        select * from appointment where dictor_name=#{name};
+    </select>
+    <update id="updateById">
+        update workspace set last_number=#{last_number} where id=#{id}
+    </update>
+    <update id="updateByName">
+        UPDATE workspace SET last_number=#{last_number} WHERE id=(
+            SELECT DISTINCT
+                dictor_id
+            FROM
+                dictor
+                    INNER JOIN appointment ON appointment.dictor_name = dictor.NAME
+            WHERE
+                dictor.NAME = #{name}
+        )
+    </update>
+</mapper>
